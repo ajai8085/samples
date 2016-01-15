@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Owin.Hosting;
+using WebApiTester.LocalQueue;
 
 namespace WebApiTester
 {
@@ -19,6 +20,23 @@ namespace WebApiTester
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Form1());
+
+            using (var context = new LocalQueueDbContext())
+            {
+                context.QueueInfos.Add(new QueueInfo
+                {
+                    Name = "ClippInbound"
+                });
+
+                context.QueueInfos.Add(new QueueInfo
+                {
+                    Name = "ClippOutbound"
+                });
+
+
+                context.SaveChanges();
+            }
+
 
             string baseAddress = "http://localhost:9000/";
 
